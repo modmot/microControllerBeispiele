@@ -63,3 +63,7 @@ int main(void){
 
 ```
 
+![ADC1](./ADC1.jpg)
+
+![ADC2](./ADC2.jpg)
+
