@@ -2,9 +2,9 @@
 
 ```c
 #define F_CPU 16000000
-#define WR_DEV 0x90 //write device adress
-#define RD_DEV 0x91 //read device adress
-#define BITRATE 42
+#define WR_DEV 0x90 // write device adress
+#define RD_DEV 0x91 // read device adress
+#define BITRATE 42	// set SCL 160kHz
 
 #include <avr/io.h>
 #include <util/delay.h>
@@ -15,21 +15,22 @@ void TW_init(unsigned char bitrate){
 }
 
 void initSPI(){
-	DDRB |= (1<<4) |(1<<5)|(1<<7);
-	SPCR |=(1<<MSTR);
-	SPCR |= (1<<SPE);
-	SPCR |= (1<<SPR1); //64
+  // set CS, MOSI, SCK to output
+	DDRB |= (1<<4) | (1<<5) | (1<<7);
+  //Master enable, SPI enable, set prescaler to 64
+	SPCR |=(1<<MSTR) | (1<<SPE) | (1<<SPR1);
 }
 
 void SPI_Send(uint8_t wert){
 	SPDR = wert;
-	while(!(SPSR & (1<<SPIF)));	
+	while(!(SPSR & (1<<SPIF)));	// waits till Flag is set
 }
 
 uint8_t TW_receive(unsigned char adress){
 	uint8_t data_rx;
 	
-	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); //start condition, enable
+  //Interrupt enable, start condition, TWI enable
+	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN);
 	while(!(TWCR &(1<<TWINT)));
 	
 	TWDR = adress;
@@ -40,8 +41,8 @@ uint8_t TW_receive(unsigned char adress){
 	while(!(TWCR&(1<<TWINT)));
 	data_rx = TWDR;
 	
+  // send stop condition
 	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN);
-	//while(!(TWCR&(1<<TWINT)));
 	return data_rx;
 }
 

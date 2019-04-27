@@ -7,35 +7,45 @@
 
 void USART_init(void){  
   UBRR0 = 103;
-  UCSR0B = (1<<RXEN0) | (1<<TXEN0);
-  UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);
+  // enables USART Receiver, enables USART Transmitter
+	UCSR0B = (1<<RXEN0) | (1<<TXEN0);
+  // sets Character Size to 8bit
+	UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);
   
   UBRR1 = 103;
+  // enables USART Receiver, enables USART Transmitter
   UCSR1B = (1<<RXEN1) | (1<<TXEN1);
+  // sets Character Size to 8bit
   UCSR1C = (1<<UCSZ11) | (1<<UCSZ10);
 }
 
 unsigned char USART_Receive(){
-  while ( !(UCSR0A & (1<<RXC0)));
+  // Flag is set when unread data in receive buffer 
+  // Flag is cleared when the receive buffer is empty
+  while (!(UCSR0A & (1<<RXC0)));
   return UDR0;
 }
 
 unsigned char USART_Receive1(){
-  while ( !(UCSR1A & (1<<RXC1)));
+  // Flag is set when unread data in receive buffer 
+  // Flag is cleared when the receive buffer is empty
+  while (!(UCSR1A & (1<<RXC1)));
   return UDR1;
 }
 
 void USART_transmit1(unsigned char sData){  
+  // If UDREn is set, the buffer is empty and therefore ready to be written.
   while(!(UCSR1A & (1<<UDRE1)));
   UDR1 = sData;
 }
 
 void USART_transmit(unsigned char sData){
+  // If UDREn is set, the buffer is empty and therefore ready to be written.
   while(!(UCSR0A & (1<<UDRE0)));
   UDR0 = sData;
 }
 
-int search_x(unsigned char regen[]){
+int search_x(unsigned char regen[]){ //?
 	int number = 0;
 	for(int i=0;i<5;i++){
 			number++;

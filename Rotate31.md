@@ -1,21 +1,18 @@
 # Rotate 31
 
 ```c
- /*
- * rotate_31_int.c
- *
- * Created: 14.09.2017 12:03:40
- * Author : mot
- */
- #define F_CPU 16000000
- #include <avr/io.h>
- #include <avr/interrupt.h>
- #include <util/delay.h>
+#define F_CPU 16000000
+#include <avr/io.h>
+#include <avr/interrupt.h>
+#include <util/delay.h>
 
 void initINT0(){
+  //The falling edge of INTn generates asynchronously an interrupt request
 	EICRA |= (1<<ISC01);
-	EICRA &= ~(1<<ISC00);
+	//EICRA &= ~(1<<ISC00);
+  // Interrupt 0 enable
 	EIMSK |= (1<<INT0);
+  // set Int Falg
 	EIFR |= (1<<INTF0);
 }
 

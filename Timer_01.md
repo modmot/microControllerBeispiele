@@ -6,16 +6,14 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-void initTIMER0()
-{
-	TCCR0A &= ~(1<<WGM00);	
-	TCCR0A &= ~(1<<WGM01);
-	TCCR0B &= ~(1<<WGM02);
-	TCCR0B &= ~(1<<CS00);
-	TCCR0B &= ~(1<<CS01);
-	TCCR0B |= (1<<CS02);
-	TIMSK0 |= (1<<TOIE0);
-	TIFR0 |= (1<<TOV0);
+void initTIMER0(){
+	// TCCR0A &= ~(1<<WGM00) & ~(1<<WGM01); // set normal Timer
+	// TCCR0B &= ~(1<<WGM02);	// set normal Timer
+	// TCCR0B &= ~(1<<CS00);	
+	// TCCR0B &= ~(1<<CS01);		
+	TCCR0B |= (1<<CS02);	// set prescaler to 256
+	TIMSK0 |= (1<<TOIE0);	// Overflow Interrupt Enable
+	TIFR0 |= (1<<TOV0);	// set Overflow Flag
 }
 
 ISR(TIMER0_OVF_vect){

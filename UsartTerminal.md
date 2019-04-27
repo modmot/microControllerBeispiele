@@ -6,17 +6,22 @@
 #include <util/delay.h>
 
 void USART_init(void){
-	UBRR0 = 103;
+	UBRR0 = 103; //set Baudrate
+  // enables USART Receiver, enables USART Transmitter
 	UCSR0B = (1<<RXEN0) | (1<<TXEN0);
+  // sets Character Size to 8bit
 	UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);
 }
 
-void USART_transmit(unsigned char sData){
+void USART_transmit(unsigned char data){
+  // If UDREn is set, the buffer is empty and therefore ready to be written.
 	while(!(UCSR0A & (1<<UDRE0)));
-	UDR0 = sData;
+	UDR0 = data;
 }
 
 unsigned char USART_receive(){
+  // Flag is set when unread data in receive buffer 
+  // Flag is cleared when the receive buffer is empty
 	while(!(UCSR0A & (1<<RXC0)));
 	return UDR0;	
 }
