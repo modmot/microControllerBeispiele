@@ -87,7 +87,7 @@ unsigned char TWreceiveMitKomma(unsigned char address){
 	while(!(TWCR &(1<<TWINT)));
   data_lb = TWDR
     
-  unsigned char data_rx = (data_hb << 8) + data_lb;
+  unsigned int data_rx = (data_hb << 8) + data_lb;
 	
 	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO);
 	return data_rx;
