@@ -21,7 +21,7 @@ int main(void){
 	initSPI();
 	while (1){
 		value+=4;
-		//SS low
+		//CS low
 		PORTB &= ~(1<<4);
 		//send HB
 		spi_transmit(value >> 8);

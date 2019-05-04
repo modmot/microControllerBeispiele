@@ -14,15 +14,15 @@ void TWinit(unsigned char bitrate) {	// set SCL 160kHz
 }
 
 void TWtransmit(unsigned char address, unsigned char data_tx) {
-	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); 	// set start condition
+	TWCR |= (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); 	// set start condition
 	while (!(TWCR & (1<<TWINT)));									// wait until TWINT is set 
 
 	TWDR = address;																// prepare address in advance
-	TWCR = (1<<TWINT) | (1<<TWEN);								// send address
+	TWCR |= (1<<TWINT) | (1<<TWEN);								// send address
 	while (!(TWCR & (1<<TWINT)));									// wait until TWINT is set 
 
 	TWDR = data_tx;
-	TWCR = (1<<TWINT) | (1<<TWEN);								// send data
+	TWCR |= (1<<TWINT) | (1<<TWEN);								// send data
 	while (!(TWCR & (1<<TWINT)));									// wait until TWINT is set
 
 	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); 	// set stop condition
@@ -31,22 +31,22 @@ void TWtransmit(unsigned char address, unsigned char data_tx) {
 unsigned char TWreceive(unsigned char address) {
 	unsigned char data_rx;												// received data
 
-	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); 	// set start condition
+	TWCR |= (1<<TWINT) | (1<<TWSTA) | (1<<TWEN); 	// set start condition
 	while (!(TWCR & (1<<TWINT)));									// wait until TWINT is set 
 
 	TWDR = address;																// prepare address in advance
-	TWCR = (1<<TWINT) | (1<<TWEN);								// send address
+	TWCR |= (1<<TWINT) | (1<<TWEN);								// send address
 	while (!(TWCR & (1<<TWINT)));									// wait until TWINT is set 
   
 	// Acknowledge status can be directly added to the data read transfer
-	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWEA);		// start receiving 1st data + ACK
+	TWCR |= (1<<TWINT) | (1<<TWEN) | (1<<TWEA);		// start receiving 1st data + ACK
 	while (!(TWCR & (1<<TWINT)));	    						// wait until TWINT is set
 	data_rx = TWDR;
 	
 	//TWCR = (1<<TWINT) | (1<<TWEN);								// start receiving 2nd data + NACK
 	//while (!(TWCR & (1<<TWINT)));	   							// wait until TWINT is set
 	
-	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); 	// set stop condition
+	TWCR |= (1<<TWINT) | (1<<TWSTO) | (1<<TWEN); 	// set stop condition
 	return data_rx;
 } 
 
@@ -61,6 +61,36 @@ int main(void) {
 		PORTA = inval;															// write temperature value to output	
 		_delay_us(50);	
 	}
+}
+```
+
+
+
+### TWReceive aus dem Test
+
+```c
+unsigned char TWreceiveMitKomma(unsigned char address){
+	unsigned char data_hb, data_lb;
+	
+	TWCR |= (1<<TWEN) | (1<<TWSTA) | (1<<TWINT);
+	while(!(TWCR &(1<<TWINT)));
+	
+	TWDR = address;
+	TWCR |= (1<<TWINT) | (1<<TWEN);
+	while(!(TWCR &(1<<TWINT)));
+	
+	TWCR |= (1<<TWINT) | (1<<TWEN) | (1<<TWEA);
+	while(!(TWCR &(1<<TWINT)));
+  data_hb = TWDR
+    
+  TWCR |= (1<<TWINT) | (1<<TWEN);
+	while(!(TWCR &(1<<TWINT)));
+  data_lb = TWDR
+    
+  unsigned char data_rx = (data_hb << 8) + data_lb;
+	
+	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO);
+	return data_rx;
 }
 ```
 

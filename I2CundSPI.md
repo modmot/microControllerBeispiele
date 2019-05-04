@@ -30,19 +30,19 @@ uint8_t TW_receive(unsigned char adress){
 	uint8_t data_rx;
 	
   //Interrupt enable, start condition, TWI enable
-	TWCR = (1<<TWINT) | (1<<TWSTA) | (1<<TWEN);
+	TWCR |= (1<<TWINT) | (1<<TWSTA) | (1<<TWEN);
 	while(!(TWCR &(1<<TWINT)));
 	
 	TWDR = adress;
-	TWCR = (1<<TWINT) | (1<<TWEN);
+	TWCR |= (1<<TWINT) | (1<<TWEN);
 	while(!(TWCR&(1<<TWINT)));
 	
-	TWCR = (1<<TWINT) | (1<<TWEN);
+	TWCR |= (1<<TWINT) | (1<<TWEN);
 	while(!(TWCR&(1<<TWINT)));
 	data_rx = TWDR;
 	
   // send stop condition
-	TWCR = (1<<TWINT) | (1<<TWSTO) | (1<<TWEN);
+	TWCR |= (1<<TWINT) | (1<<TWSTO) | (1<<TWEN);
 	return data_rx;
 }
 

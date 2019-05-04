@@ -35,7 +35,7 @@
 
 void initSPI(){
   //SCK, MOSI,CS, SCPH auf 0xFF bevor SPI Settings
-	DDRB|= (1<<4) | (1<<5) | (1<<7);
+	DDRB |= (1<<4) | (1<<5) | (1<<7);
 	SPCR |= (1<<SPE) | (1<<MSTR); //4MHZ SPI takt
 }
 
@@ -51,14 +51,14 @@ int main(void){
   while (1){
   	PORTB &= ~(1<<4);	//stcp=0
     SPI_send(0xAA);
-    PORTB|= (1<<4);		//stcp=1
+    PORTB |= (1<<4);		//stcp=1
     //Ausgabe ist das erste Bitmuster
     _delay_us(1);
       
     PORTB &= ~(1<<4); //stcp=0
     SPI_send(0x55);
     //Ausgabe des zweiten Bitmusters
-    PORTB|= (1<<4);		//stcp=1
+    PORTB |= (1<<4);		//stcp=1
     _delay_us(1);
   }
 }
