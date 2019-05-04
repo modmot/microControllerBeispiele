@@ -69,7 +69,7 @@ int main(void) {
 ### TWReceive aus dem Test
 
 ```c
-unsigned char TWreceiveMitKomma(unsigned char address){
+uint16_t TWreceiveMitKomma(unsigned char address){
 	unsigned char data_hb, data_lb;
 	
 	TWCR |= (1<<TWEN) | (1<<TWSTA) | (1<<TWINT);
@@ -86,11 +86,22 @@ unsigned char TWreceiveMitKomma(unsigned char address){
   TWCR |= (1<<TWINT) | (1<<TWEN);
 	while(!(TWCR &(1<<TWINT)));
   data_lb = TWDR
-    
-  unsigned short data_rx = (data_hb << 8);
 	
 	TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWSTO);
-	return data_rx = data_lb;
+	return data_rx = (data_hb << 8) + data_lb;
+}
+
+int main(){
+  TW_init();
+  DDRA = 0xFF;
+  uint8_t hb;
+  uint16_t data;
+  while(1){
+    data= TWreceive(0x9B);
+    data >> 8
+    hb = data;
+    PORTA = hb;
+  }
 }
 ```
 
