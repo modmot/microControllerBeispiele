@@ -1,4 +1,4 @@
-# Usart transmit in Terminal
+#  Usart transmit in Terminal
 
 ```c
 #define F_CPU 16000000

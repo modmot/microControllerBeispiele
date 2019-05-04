@@ -13,11 +13,10 @@ ISR(ADC_vect) {
 	PORTD=ADCH;
 }
 void initADC() {
-	ADCSRA |=(1<<ADEN);					//ADC enablen
-	ADCSRA |=(1<<ADPS2) | (1<<ADPS1);	//Prescaler 64
-	ADCSRA |=(1<<ADIE);					//Interrupt Enable
-	ADCSRA |=(1<<ADATE);				//Auto Trigger Enable
-	ADMUX |=(1<<ADLAR);					//left align result (for 8bit)
+  //ADC enablen, Prescaler 64, Interrupt Enable, Auto Trigger Enable
+	ADCSRA |=(1<<ADEN) | (1<<ADPS2) | (1<<ADPS1) | (1<<ADIE) | (1<<ADATE);
+	//left align result (for 8bit)
+  ADMUX |=(1<<ADLAR);
 }
 int main(void) {
 	initADC();

@@ -40,7 +40,7 @@ void initSPI(){
 }
 
 void SPI_send(unsigned int x){
-  //sendet alle Werte vom MOSIraus zum Baustein
+  //sendet alle Werte vom MOSI raus zum Baustein
 	SPDR = x;
   //Wenn der serielle Transfer fertig ist wird die SPI Flag gesetzt/
 	while(!(SPSR&(1<<SPIF)));
