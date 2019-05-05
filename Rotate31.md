@@ -29,20 +29,12 @@ ISR(INT0_vect){
 }
 
 
- int main(void)
- {
+ int main(void){
 	 DDRB = 0xFF;
 	 PORTB = 0x01;		 
 	 sei();
 	 initINT0();	 
-	 while (1){
-			 /* in ISR
-			 PORTA = (PORTA << 1);
-			 if (PORTA >= 64 ){		 
-				 PORTA &= 0x1F;
-				 PORTA |= 0x01;
-			 } */
-		}
+	 while (1){}
  }
 ```
 
@@ -59,15 +51,10 @@ ISR(INT0_vect){
 
 void config(){
 	sei();
-	OCR0A = 0x1F; //30d
-	TCCR0A &= ~(1 << WGM00);
+	OCR0A = 0x1F; //31d
 	TCCR0A |= 1 << WGM01;
-	TCCR0B &= ~(1 << WGM02);
-	TCCR0B &= ~(1 << CS00);
-	TCCR0B &= ~(1 << CS01);
 	TCCR0B |= 1 << CS02;
-	TIMSK0 |= 1 << TOIE0;
-	TIMSK0 |= 1 << OCIE0A;
+	TIMSK0 |= (1 << TOIE0) | (1 << OCIE0A);
 	TIFR0 |= 1 << OCF0A;
 }
 
@@ -76,11 +63,9 @@ ISR(TIMER0_COMPA_vect){
 	if (PORTC >= 0x80){
 		PORTC = 0x00;
 	}
-	
 }
 
-int main(void)
-{	
+int main(void){	
 	config();
 	DDRC = 0xFF;
 	PORTC = 0x00;
